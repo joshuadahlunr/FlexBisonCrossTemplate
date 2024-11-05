@@ -1,15 +1,24 @@
 #include <iostream>
 
-#ifdef _MSC_VER 
-#define YY_NO_UNISTD_H
-#include <io.h>
-#endif
-
+#include <reflex/input.h>
 #include "gen/parser.h"
 #include "gen/scanner.h"
 
+int yylex(reflex::Input* input /* = nullptr */) {
+	static Lexer lexer;
+	if(input) { lexer = Lexer(*input); return true; }
+	else return lexer.lex();
+}
+
+void set_input(reflex::Input& input) {
+	yylex(&input);
+}
+void set_input(reflex::Input&& input) {
+	yylex(&input);
+}
+
 void flexTest(std::string string) {
-	yy_scan_string(string.c_str());
+	set_input(std::move(string));
 	int	token;
 
 	while((token=yylex()) != 0){
@@ -28,15 +37,13 @@ void flexTest(std::string string) {
 }
 
 void bisonTest(std::string string) {
-	yy_scan_string(string.c_str());
+	set_input(string);
 	yyparse();
 }
 
 int main() {
 	flexTest("2 + 2; 4 / 2; 5 - 6;");
 	bisonTest("2 + 2; 4 / 2; 5 - 6;");
-
-	// std::cout << "Hello World" << std::endl;
 }
 
 void yyerror(const char* s) {
