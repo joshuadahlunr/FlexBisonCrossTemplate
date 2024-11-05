@@ -1,7 +1,7 @@
 /* definitions */
 
 %{
-extern int yylex();
+extern int yylex(reflex::Input* input = nullptr);
 extern int yyparse();
 void yyerror(const char* s);
 %}

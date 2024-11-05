@@ -22,11 +22,11 @@ integer [0-9]+
 ")" { return CLOSE; }
 ";" { return SEMI; }
 {integer} { 
-	yylval = atoi(yytext);
+	yylval = atoi(text());
 	return INTEGER;
 }
  /*. { return ERROR; }*/
-. { return yytext[0]; } /* Returns whatever character is found (which won't match the parser, creating an error) */
+. { return text()[0]; } /* Returns whatever character is found (which won't match the parser, creating an error) */
 
 
 %% /* code */

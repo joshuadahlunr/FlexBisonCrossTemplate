@@ -9,3 +9,4 @@ add_bison_target(run_bison ${CMAKE_SOURCE_DIR}/calculator.y OUTPUT ${CMAKE_SOURC
 
 add_executable(tst hello.cpp)
 add_dependencies(tst run_flex run_bison)
+target_link_libraries(tst PUBLIC ReflexLibStatic)
